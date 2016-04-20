@@ -8,9 +8,11 @@ import webpack from 'webpack';
 const DEBUG = process.env.NODE_ENV !== 'production';
 
 export default {
-  entry: DEBUG
-    ? ['webpack-hot-middleware/client', './index.js']
-    : './index.js',
+  entry: DEBUG ? [
+    'webpack-hot-middleware/client',
+    'react-hot-loader/patch',
+    './index.js'
+  ] : './index.js',
   context: path.resolve(__dirname, './client'),
   output: {
     filename: `[name]${DEBUG ? '' : '.[hash]'}.js`,
@@ -28,16 +30,7 @@ export default {
       {
         test: /\.js$/,
         loader: 'babel',
-        exclude: /node_modules/,
-        query: DEBUG ? {
-          plugins: [['react-transform', {
-            transforms: [{
-              transform: 'react-transform-hmr',
-              imports: ['react'],
-              locals: ['module']
-            }]
-          }]]
-        } : {}
+        exclude: /node_modules/
       },
       {
         test: /\.gif$|\.jpe?g$|\.png$|\.svg$/i,
